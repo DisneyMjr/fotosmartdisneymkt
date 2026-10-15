@@ -1,0 +1,13 @@
+FotoSmart - personalização baseada no PhotoCraft
+
+Esta versão foi adaptada para usar o nome FotoSmart e o logo/ícone enviado pelo usuário.
+
+O que foi alterado:
+- branding principal do aplicativo para FotoSmart
+- ícones do app e do instalador substituídos pelo logo azul FS
+- nome exibido do app no Windows ajustado para FotoSmart
+- base técnica do projeto original preservada para manter compatibilidade de build
+
+Observação:
+- nomes técnicos internos do workspace Rust continuam como photocraft em várias partes para evitar quebrar a compilação
+- os ícones internos das ferramentas (pincel, laço, texto etc.) foram mantidos
