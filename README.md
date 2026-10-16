@@ -23,7 +23,7 @@
 </p>
 
 <p align="center">
-  <a href="https://discord.gg/artcraft"><img alt="Join the ArtCraft community on Discord" src="https://img.shields.io/badge/Join%20us%20on%20Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" height="40"></a>
+  <a href="https://instagram.com/disneymkt"><img alt="Me siga no instagram" src="[https://img.shields.io/badge/Join%20us%20on%20Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white](https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/1280px-Instagram_icon.png?utm_source=pt.wikipedia.org&utm_campaign=index&utm_content=thumbnail)" height="40"></a>
 </p>
 
 <p align="center">
