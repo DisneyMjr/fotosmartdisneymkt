@@ -8,7 +8,6 @@ use crate::PhotocraftApp;
 
 pub const DISCORD: &str = "https://instagram.com/disneymkt";
 pub const UPDATES: &str = "https://github.com/DisneyMjr/FOTOSMART/releases/latest";
-pub const UPDATES: &str = "https://github.com/DisneyMjr/FOTOSMART/releases/latest";
 pub const ISSUES: &str = "https://github.com/storytold/photocraft/issues";
 
 /// Help-menu link commands: (id, url). Labels live in `menus::UI_COMMANDS`.
