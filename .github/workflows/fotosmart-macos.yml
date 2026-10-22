@@ -1,0 +1,58 @@
+name: Gerar DMG FotoSmart macOS
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  macos:
+    name: macOS universal (Intel + Apple Silicon)
+    runs-on: macos-15
+    timeout-minutes: 180
+    steps:
+      - name: Obter codigo
+        uses: actions/checkout@v4
+      - name: Obter fontes licenciadas
+        uses: actions/checkout@v4
+        with:
+          repository: storytold/craft-fonts
+          ref: 3d9ab3a132ed0eff457e424226a435a901da30d3
+          path: craft-fonts
+      - name: Preparar compilador Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+      - name: Cache de compilacao
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: fotosmart-macos-universal
+      - name: Instalar dependencias macOS
+        run: |
+          brew install cmake pkg-config libheif
+      - name: Compilar e empacotar aplicativo universal
+        shell: bash
+        env:
+          CRAFT_FONTS_DIR: ${{ github.workspace }}/craft-fonts
+          CRAFT_FONTS_REQUIRED: '1'
+        run: bash packaging/macos/package.sh --arch universal
+      - name: Verificar pacote gerado
+        shell: bash
+        run: |
+          ls -lh dist/release/
+          test -n "$(find dist/release -maxdepth 1 -name 'FotoSmart-*-macos-universal.dmg' -print -quit)"
+          shasum -a 256 dist/release/*.dmg > dist/release/SHA256SUMS-macos.txt
+      - name: Disponibilizar instalador macOS
+        uses: actions/upload-artifact@v4
+        with:
+          name: FotoSmart-macOS-Universal
+          path: |
+            dist/release/*.dmg
+            dist/release/*macos*.zip
+            dist/release/SHA256SUMS-macos.txt
+          if-no-files-found: error
+          retention-days: 30
