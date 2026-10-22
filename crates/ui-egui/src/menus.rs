@@ -33,6 +33,13 @@ pub const UI_COMMANDS: &[(&str, &str, &[&str], Option<&str>)] = &[
     ("window.panel.activate", "Activate Panel", &[], None),
     ("window.panel.close", "Close Panel", &[], None),
     ("file.open", "Open…", &["File"], Some("Cmd+O")),
+    // DisneyMkt: predefinicoes sociais para criacao rapida de documentos editaveis.
+    ("smart.social.post", "Post Instagram (1080 x 1440)", &["File", "Smart Social"], None),
+    ("smart.social.square", "Post quadrado (1080 x 1080)", &["File", "Smart Social"], None),
+    ("smart.social.story", "Story / Reels (1080 x 1920)", &["File", "Smart Social"], None),
+    ("smart.social.landscape", "Capa horizontal (1920 x 1080)", &["File", "Smart Social"], None),
+    ("smart.social.youtube", "Thumbnail YouTube (1280 x 720)", &["File", "Smart Social"], None),
+    ("smart.social.carousel", "Carrossel Instagram (1080 x 1350)", &["File", "Smart Social"], None),
     ("file.save", "Save", &["File"], Some("Cmd+S")),
     ("file.saveAs", "Save As…", &["File"], Some("Cmd+Shift+S")),
     ("file.exit", "Exit", &["File"], Some("Cmd+Q")),
@@ -99,10 +106,9 @@ pub const UI_COMMANDS: &[(&str, &str, &[&str], Option<&str>)] = &[
     ("edit.search", "Search…", &["Edit"], Some("Cmd+F")),
     ("help.discord", "Me siga no Insta", &["Help"], None),
     ("help.update", "Verificar atualizações", &["Help"], None),
-    ("help.update", "Verificar atualizações", &["Help"], None),
     ("help.reportIssue", "Report an Issue…", &["Help"], None),
     ("help.systemInfo", "System Info…", &["Help"], None),
-    ("help.about", "About PhotoCraft", &["Help"], None),
+    ("help.about", "Sobre o FotoSmart", &["Help"], None),
 ];
 
 /// Window › <document>: the open documents, listed at the end of the Window menu as in Photoshop.
@@ -145,6 +151,19 @@ fn workspace_name(id: &str) -> Option<&'static str> {
         "motion" => "Motion",
         _ => return None,
     })
+}
+
+/// Formats in physical pixels. Available through menus, palette and automation.
+fn social_preset(id: &str) -> Option<(u32, u32)> {
+    match id {
+        "smart.social.post" => Some((1080, 1440)),
+        "smart.social.square" => Some((1080, 1080)),
+        "smart.social.story" => Some((1080, 1920)),
+        "smart.social.landscape" => Some((1920, 1080)),
+        "smart.social.youtube" => Some((1280, 720)),
+        "smart.social.carousel" => Some((1080, 1350)),
+        _ => None,
+    }
 }
 
 /// Run a command id from any source (menu, shortcut, palette, automation).
@@ -288,6 +307,10 @@ pub(crate) fn invoke_unguarded(app: &mut PhotocraftApp, ctx: &egui::Context, id:
             Ok(Value::Null)
         }
         "layer.duplicate" if params.as_object().is_none_or(|o| o.is_empty()) => crate::duplicate_layer_ui::open(app),
+        id if social_preset(id).is_some() => {
+            let (width, height) = social_preset(id).expect("preset checked");
+            app.run("file.new", json!({"width": width, "height": height}))
+        }
         "file.new" if params.as_object().is_none_or(|o| o.is_empty()) => {
             let fields = app.new_document_fields();
             let d = app.ui.open_dialog(DialogKind::NewDocument, fields);
@@ -767,6 +790,7 @@ pub fn is_enabled(app: &PhotocraftApp, id: &str) -> bool {
     match id {
         "window.panel.activate" | "window.panel.layout" => true,
         "window.panel.group" | "window.panel.move" | "window.panel.float" | "window.panel.dock" | "window.panel.close" => !app.session.prefs().workspace_locked,
+        i if social_preset(i).is_some() => true,
         "file.open" | "file.exit" | "file.clearRecent" | "file.removeRecent" | "help.about" | "help.systemInfo" | "edit.search" => true,
         i if i.starts_with("file.openRecent.") => true,
         i if i.starts_with(DOCUMENT_ITEM) => true,
@@ -1935,7 +1959,7 @@ mod tests {
                 }
                 h.run_steps(3);
             };
-            let open = |h: &Harness<'_, PhotocraftApp>| h.query_by_label_contains("About PhotoCraft").is_some();
+            let open = |h: &Harness<'_, PhotocraftApp>| h.query_by_label_contains("Sobre o FotoSmart").is_some();
             let field_id = egui::Id::new("help-menu-search").with("field");
             let help = h.get_by_label("Help").rect().center();
             click(&mut h, help);
