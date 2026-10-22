@@ -68,3 +68,8 @@ Projeto Rust organizado como workspace Cargo. Consulte `Cargo.toml`, `crates/` e
 A personalização e as ferramentas adicionadas são apresentadas sob a marca **DisneyMkt**. A base original e seus contribuidores mantêm seus direitos e créditos, conforme `ATTRIBUTION.md`, `NOTICE`, `LICENSE-MIT` e `LICENSE-APACHE`. Arquivos adicionais podem ter suas próprias licenças. A marca FotoSmart não substitui essas obrigações.
 
 Contato e novidades: [@disneymkt](https://www.instagram.com/disneymkt/).
+
+
+## Atualização de desempenho DisneyMkt
+
+O utilitário **Smart Batch** inclui recorte com ponto focal, verificação preventiva de espaço livre, exportações temporárias mais seguras e WebP. Consulte `SMART-BATCH.md` e `ATUALIZACAO-DESEMPENHO-DISNEYMKT.md`. Os recursos não alteram o gerenciamento de cache interno do editor.

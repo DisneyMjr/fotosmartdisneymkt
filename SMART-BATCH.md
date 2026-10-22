@@ -1,28 +1,29 @@
-# Smart Batch DisneyMkt — primeira versão
+# Smart Batch DisneyMkt — atualização de confiabilidade
 
-Utilitário auxiliar para produzir imagens em lote a partir de uma pasta. Ainda não está integrado visualmente ao editor FotoSmart.
+Utilitário auxiliar para processamento em lote. **Ainda não integra o painel gráfico do editor FotoSmart** e não executa IA.
 
-## Recursos disponíveis
-
-- Tamanhos: post 1080×1440, quadrado 1080×1080, Story 1080×1920, carrossel 1080×1350, thumbnail 1280×720, horizontal 1920×1080 ou personalizado.
-- Tipos: PNG, JPG, WebP.
-- Ajuste `recortar`: ocupa a imagem inteira, cortando excessos; `encaixar`: mantém toda a imagem, com margens.
-- Marca d'água com arquivo PNG e texto simples.
-- Proteção dos arquivos originais; não substitui arquivos existentes sem `--substituir`.
-- Relatório CSV de execução.
+## Recursos
+- Conversão para JPG, PNG e WebP, formatos para redes sociais ou dimensões personalizadas.
+- Ajuste por recorte ou encaixe e marca-d'água por imagem/texto.
+- Novo: ponto de recorte ajustável com `--foco-x` e `--foco-y` (0 a 1; padrão central 0,5/0,5). **Não é detecção automática de rosto nem recorte por IA.**
+- Novo: conferência de espaço livre no destino com `--espaco-min-mb` (padrão 256 MB); proteção preventiva, não é garantia de espaço suficiente para lotes longos.
+- Novo: gravação primeiro em um arquivo temporário na pasta de destino e substituição somente após exportação concluída. Temporários criados pela tarefa são apagados após falhas tratadas.
+- Preserva imagens de entrada, não substitui saídas existentes sem `--substituir`.
+- Processa uma imagem por vez, produz relatório CSV de sucesso e erros.
 
 ## Windows
-
 ```powershell
 py -m pip install -r tools/requirements-smart-batch.txt
-py tools/smart_batch.py --entrada "C:\Fotos" --saida "C:\Posts" --formato post --tipo jpg --ajuste recortar
+py tools/smart_batch.py --entrada "C:\Fotos" --saida "C:\Posts" --formato post --tipo webp --ajuste recortar --foco-x 0.45 --foco-y 0.35
 ```
 
-## macOS / Linux
-
+## macOS e Linux
 ```bash
 python3 -m pip install -r tools/requirements-smart-batch.txt
 python3 tools/smart_batch.py --entrada ./fotos --saida ./posts --formato story --tipo png --ajuste encaixar
 ```
 
-`--help` lista todas as opções. Esta etapa não implementa processamento por IA, edição de PSD em lote ou ligação visual com os painéis Rust.
+Para ajuda completa, execute `python3 tools/smart_batch.py --help`.
+
+## Limites e próximas etapas
+A limpeza de cache implementada vale apenas para os **arquivos temporários deste utilitário**. Não altera o mecanismo de disco de rascunho/caches internos do editor Rust nem aumenta sua memória disponível. O auto-recorte por detecção de rostos, preenchimento generativo em 4K, orçamento de créditos, avisos sonoros e gerenciamento global de memória permanecem planejados. Para implementar esses módulos no aplicativo, será necessário adaptar a interface Rust e realizar testes reais em Windows, Linux e macOS.
