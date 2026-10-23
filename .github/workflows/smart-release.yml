@@ -192,9 +192,9 @@ jobs:
           fi
           printf 'Arquivos encontrados: %s\n' "${#FILES[@]}"
           printf '  %s\n' "${FILES[@]}"
-          if gh release view "$TAG" >/dev/null 2>&1; then
+          if gh release view "$TAG" --repo "$GH_REPO" >/dev/null 2>&1; then
             echo "Atualizando Release existente: $TAG"
           else
-            gh release create "$TAG" --target "$GITHUB_SHA" --title "FotoSmart $TAG" --notes "Instaladores Windows x64, Linux x64 e macOS universal. O DMG sem notarizacao pode exigir autorizacao manual no macOS."
+            gh release create "$TAG" --repo "$GH_REPO" --target "$GITHUB_SHA" --title "FotoSmart $TAG" --notes "Instaladores Windows x64, Linux x64 e macOS universal. O DMG sem notarizacao pode exigir autorizacao manual no macOS."
           fi
-          gh release upload "$TAG" "${FILES[@]}" --clobber
+          gh release upload "$TAG" "${FILES[@]}" --repo "$GH_REPO" --clobber
